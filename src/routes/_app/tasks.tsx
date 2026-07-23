@@ -128,7 +128,7 @@ function TasksContent() {
       </form>
 
       {/* Task list */}
-      <div className="flex-1 px-4 pt-4 pb-4">
+      <div className="flex-1 px-4 pt-4 pb-4 bg-[#f2f2f7]">
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
