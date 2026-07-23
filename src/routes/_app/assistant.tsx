@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useRef, useEffect } from 'react'
 import { BlinkClientBoundary } from '@/components/BlinkClientBoundary'
 import { Send } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 
 export const Route = createFileRoute('/_app/assistant')({
   head: () => ({
@@ -37,30 +38,51 @@ interface Message {
 function AssistantContent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
+  const [isSending, setIsSending] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const { user } = useAuth()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
     const text = input.trim()
-    if (!text) return
+    if (!text || isSending || !user?.email) return
 
     const userMsg: Message = { id: crypto.randomUUID(), text, from: 'user' }
     setMessages((prev) => [...prev, userMsg])
     setInput('')
+    setIsSending(true)
 
-    // Visual echo — no real AI response yet
-    setTimeout(() => {
+    try {
+      const response = await fetch('https://n1s.app.n8n.cloud/webhook/assistant-router', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email, message: text }),
+      })
+
+      if (!response.ok) throw new Error(`Router error: ${response.status}`)
+
+      const replyText = await response.text()
+
       const aiMsg: Message = {
         id: crypto.randomUUID(),
-        text: 'This is a preview of the AI assistant. Real responses will be available soon.',
+        text: replyText || 'No response text received.',
         from: 'ai',
       }
       setMessages((prev) => [...prev, aiMsg])
-    }, 600)
+    } catch (err) {
+      const errorMsg: Message = {
+        id: crypto.randomUUID(),
+        text: 'Something went wrong reaching the assistant. Please try again.',
+        from: 'ai',
+      }
+      setMessages((prev) => [...prev, errorMsg])
+    } finally {
+      setIsSending(false)
+    }
   }
 
   return (
@@ -114,7 +136,7 @@ function AssistantContent() {
           />
           <button
             type="submit"
-            disabled={!input.trim()}
+            disabled={!input.trim() || isSending}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:opacity-90 active:scale-95 disabled:opacity-30"
           >
             <Send size={14} />
