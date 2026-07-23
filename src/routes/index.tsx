@@ -90,34 +90,33 @@ function LandingContent() {
 
           {/* Metadata + paragraph block */}
           <motion.div
-            className="max-w-[80%]"
             initial={{ opacity: 0 }}
             animate={ready ? { opacity: 1 } : {}}
             transition={{ duration: 1.2, ease: easing, delay: 0.15 }}
           >
-            {/* Row 1: 3 columns */}
-            <div className="flex items-baseline justify-center gap-x-[10px] py-[5px]">
+            {/* Row 1: 3 columns — edges aligned to divider */}
+            <div className="flex items-baseline justify-between py-[5px]">
               <span className="text-[9px] uppercase tracking-[0.30em] text-white/[0.38]" style={{ fontWeight: 400 }}>System</span>
               <span className="text-[10px] uppercase tracking-[0.28em] text-white/[0.62]" style={{ fontWeight: 500 }}>Business Intelligence</span>
               <span className="text-[9px] uppercase tracking-[0.30em] text-white/[0.38]" style={{ fontWeight: 400 }}>N1S</span>
             </div>
 
-            {/* Divider — extends beyond text block to right edge */}
-            <div className="-mr-5 sm:-mr-8 h-px bg-white/[0.20]" />
+            {/* Divider — symmetric equal margins */}
+            <div className="h-px bg-white/[0.20]" />
 
-            {/* Row 2: 3 columns */}
-            <div className="flex items-baseline justify-center gap-x-[10px] py-[5px]">
+            {/* Row 2: 3 columns — edges aligned to divider */}
+            <div className="flex items-baseline justify-between py-[5px]">
               <span className="text-[9px] uppercase tracking-[0.30em] text-white/[0.38]" style={{ fontWeight: 400 }}>Product</span>
               <span className="text-[10px] uppercase tracking-[0.28em] text-white/[0.62]" style={{ fontWeight: 500 }}>Dashboard</span>
               <span className="text-[9px] uppercase tracking-[0.30em] text-white/[0.38]" style={{ fontWeight: 400 }}>v1.0</span>
             </div>
 
-            {/* Divider — extends beyond text block to right edge */}
-            <div className="-mr-5 sm:-mr-8 h-px bg-white/[0.20]" />
+            {/* Divider — symmetric equal margins */}
+            <div className="h-px bg-white/[0.20]" />
 
             {/* Paragraph — single dense block */}
             <p
-              className="pt-[10px] text-[13px] leading-[1.48] text-white/[0.52] max-w-[85%]"
+              className="max-w-[80%] pt-[10px] text-[13px] leading-[1.48] text-white/[0.52]"
               style={{ fontWeight: 300 }}
             >
               See every important number in your business. Understand what is happening. Know exactly what to do next.
@@ -128,7 +127,7 @@ function LandingContent() {
         {/* ─── GLASS RIBBON — Login ─── */}
         <motion.form
           onSubmit={handleSubmit}
-          className="shrink-0 border-t border-white/[0.06] bg-[rgba(50,50,50,0.25)] backdrop-blur-2xl"
+          className="shrink-0 border-t border-white/[0.06] bg-[rgba(50,50,50,0.25)] backdrop-blur-2xl p-3"
           initial={{ opacity: 0 }}
           animate={ready ? { opacity: 1 } : {}}
           transition={{ duration: 0.9, ease: easing, delay: 0.55 }}
